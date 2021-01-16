@@ -6,7 +6,8 @@ const config = require("config");
 const debug = require("debug")("app:startup");
 
 const logger = require("./middlewares/logger");
-const genres = require("./routes/genres");
+const genres = require("./routes/genres_db");
+const customers = require("./routes/customers_db");
 const home = require("./routes/home");
 
 const app = express();
@@ -35,6 +36,7 @@ app.use(logger);
 // routes:
 app.use("/", home);
 app.use("/api/genres", genres);
+app.use("/api/customers", customers);
 
 // Configuration:
 // set in config folder
