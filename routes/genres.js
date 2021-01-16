@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 
+const auth = require("../middlewares/auth");
+
 // fakeData:
 const genres = [
   {
@@ -36,7 +38,7 @@ router.get("/:id", (req, res) => {
   return res.status(200).send(genre);
 });
 
-router.post("/", (req, res) => {
+router.post("/", auth, (req, res) => {
   // validationSchema:
   const schema = Joi.object({
     name: Joi.string().required().min(3),

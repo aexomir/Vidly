@@ -4,7 +4,14 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 const Joi = require("joi");
 
+const auth = require("../middlewares/auth");
+
 const User = require("../models/user");
+
+router.get("/me", auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  res.status(200).send(user);
+});
 
 router.post("/", async (req, res) => {
   try {

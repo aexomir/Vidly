@@ -21,6 +21,11 @@ const userSchema = mongoose.Schema({
     minLength: 8,
     maxLength: 1024,
   },
+  // role: {
+  //   type: String,
+  //   required: true,
+  //   default: 'member',
+  // }
 });
 
 userSchema.methods.generateAuthToken = function () {
