@@ -1,5 +1,5 @@
 const express = require("express");
-const Joi = require("joi");
+const mongoose = require("mongoose");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const config = require("config");
@@ -10,6 +10,16 @@ const genres = require("./routes/genres");
 const home = require("./routes/home");
 
 const app = express();
+
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => console.log("Connected to mongoDB"))
+  .catch((err) =>
+    console.log(
+      "Couldn't connect to mongoDB ; process finished with error: ",
+      err.message
+    )
+  );
 
 app.set("view engine", "pug");
 app.set("views", "./views");
