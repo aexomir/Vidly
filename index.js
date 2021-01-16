@@ -8,12 +8,17 @@ const debug = require("debug")("app:startup");
 const logger = require("./middlewares/logger");
 const genres = require("./routes/genres_db");
 const customers = require("./routes/customers_db");
+const movies = require("./routes/movies_db");
+const rentals = require("./routes/rentals_db");
 const home = require("./routes/home");
 
 const app = express();
 
 mongoose
-  .connect("mongodb://localhost/vidly")
+  .connect("mongodb://localhost/vidly", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connected to mongoDB"))
   .catch((err) =>
     console.log(
@@ -37,11 +42,13 @@ app.use(logger);
 app.use("/", home);
 app.use("/api/genres", genres);
 app.use("/api/customers", customers);
+app.use("/api/movies", movies);
+app.use("/api/rentals", rentals);
 
 // Configuration:
 // set in config folder
 debug(`Application name: ${config.get("name")}`);
 debug(`Application Mail: ${config.get("mail.host")}`);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 27017;
 app.listen(port, () => console.log(`Listening on port ${port}`));

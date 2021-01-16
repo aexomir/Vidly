@@ -1,4 +1,3 @@
-const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const genreSchema = mongoose.Schema({
@@ -12,4 +11,4 @@ const genreSchema = mongoose.Schema({
 
 const Genre = mongoose.model("Genre", genreSchema);
 
-module.exports.Genre = Genre;
+module.exports = Genre;

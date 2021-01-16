@@ -2,20 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 
-const Genre = require('../models/genre')
+const Genre = require("../models/genre");
 
 router.get("/", async (req, res) => {
-  const genres = await Genre.find().sort("name");
+  try {
+    const genres = await Genre.find().sort("name");
 
-  // not found any:
-  if (!genres) return res.status(404).send("Not Found");
+    // not found any:
+    if (!genres) return res.status(404).send("Not Found");
 
-  // send:
-  return res.status(200).send(genres);
+    // send:
+    return res.status(200).send(genres);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-router.get("/:id", (req, res) => {
-  const genre = await Genre.findById(req.params.id)
+router.get("/:id", async (req, res) => {
+  const genre = await Genre.findById(req.params.id);
 
   // not found with the given id:
   if (!genre) return res.status(404).send("Not Found");
@@ -24,7 +28,7 @@ router.get("/:id", (req, res) => {
   return res.status(200).send(genre);
 });
 
-router.post("/", async(req, res) => {
+router.post("/", async (req, res) => {
   // validationSchema:
   const schema = Joi.object({
     name: Joi.string().required().min(3),
@@ -42,13 +46,17 @@ router.post("/", async(req, res) => {
     name: req.body.name,
   });
 
-  genre = await genre.save()
+  genre = await genre.save();
   return res.status(200).send(genre);
 });
 
 router.put("/:id", async (req, res) => {
   // not found:
-  const genre = await Genre.findByIdAndUpdate(req.params.id,{name: req.body.name},{new: true})
+  const genre = await Genre.findByIdAndUpdate(
+    req.params.id,
+    { name: req.body.name },
+    { new: true }
+  );
 
   // not found with the given id:
   if (!genre) return res.status(404).send("Not Found");
@@ -71,7 +79,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   // not found:
-  const genre = Genre.findByIdAndRemove({_id: req.params.id});
+  const genre = Genre.findByIdAndRemove({ _id: req.params.id });
 
   // not found with the given id:
   if (!genre) return res.status(404).send("Not Found");
